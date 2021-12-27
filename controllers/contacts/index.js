@@ -2,15 +2,13 @@ import repositoryContacts from '../../repository/contacts'
 import { HttpCode } from '../../lib/constants'
 
 const getContacts = async (req, res, next) => {
-console.log(req.query);
   const contacts = await repositoryContacts.listContacts(req.query)
-  res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, data: { ...contacts } })
+  res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, data: contacts })
 }
 
 const getContactById = async (req, res, next) => {
   const { id } = req.params
   const contact = await repositoryContacts.getContactById(id)
-  console.log(contact);
   if (contact) {
     return res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, data: { contact } })
   }
