@@ -40,4 +40,34 @@ const logout = async (req, res, next) => {
     res.status(HttpCode.NO_CONTENT).json({ status: 'success', code: HttpCode.OK, data: {} })
 }
 
-export {registration, login, logout}
+const currentUser = async (req, res, next) => {
+  const { email, subscription } = req.user
+  const token = req.get('authorization')?.split(' ')[1]
+  console.log(token);
+  if (token) {
+    return res
+      .status(HttpCode.OK)
+      .json({
+    status: 'success',
+    code: HttpCode.OK,
+    data: { email, subscription },
+  })
+  }
+  res
+    .status(HttpCode.UNAUTHORIZED)
+    .json({ status: 'error', code: HttpCode.UNAUTHORIZED, message: 'Not authorized' })
+}
+
+const updateSubscription = async (req, res, next) => {
+  const { email, id } = req.user
+  const { subscription } = req.body
+  await authService.setSubscription(id, subscription)
+
+  res.status(HttpCode.OK).json({
+    status: 'success',
+    code: HttpCode.OK,
+    data: { email, subscription },
+  })
+}
+
+export {registration, login, logout, currentUser, updateSubscription}

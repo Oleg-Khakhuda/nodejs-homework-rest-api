@@ -4,7 +4,8 @@ const { Types } = mongoose
 
 const listContacts = async (userId, { sortBy, sortByDesc, filter, limit = 10, skip = 0 }) => {
   let sortCriteria = null
-  const total = await Contact.find({owner: userId}).countDocuments()
+  
+  const total = await Contact.countDocuments({owner: userId})
   let result = Contact.find({ owner: userId }).populate({
     path: 'owner',
     select: 'name email age role'
@@ -18,8 +19,9 @@ const listContacts = async (userId, { sortBy, sortByDesc, filter, limit = 10, sk
   if (filter) {
     result = result.select(filter.split('|').join(' '))
   }
+
   result = await result.skip(Number(skip)).limit(Number(limit)).sort(sortCriteria)
-  return {total, contacts: result}
+  return {total, limit, contacts: result}
 }
 
 const getContactById = async (userId, contactId) => {

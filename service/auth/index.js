@@ -32,6 +32,10 @@ class AuthService {
     async setToken(id, token) {
         await Users.updateToken(id, token)
     }
+
+    async setSubscription(id, subscription) {
+        await Users.setSubscription(id, subscription);
+  }
 }
 
 export default AuthService

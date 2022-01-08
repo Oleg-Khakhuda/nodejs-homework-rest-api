@@ -9,5 +9,4 @@ const router = new Router()
 
 router.get('/stats/:id', guard, roleAccess(Role.ADMIN), aggregation)
 
-
 export default router
