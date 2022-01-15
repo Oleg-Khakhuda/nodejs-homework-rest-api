@@ -18,7 +18,11 @@ const updateToken = async (id, token) => {
 }
 
 const setSubscription = async (id, subscription) => {
-  return await User.updateOne({ _id: id }, { subscription });
-};
+  return await User.updateOne({ _id: id }, { subscription })
+}
 
-export default { findById, findByEmail, create, updateToken, setSubscription }
+const updateAvatar = async (id, avatarUrl, idAvatarCloud = null) => {
+  return await User.updateOne({ _id: id }, { avatarUrl, idAvatarCloud })
+}
+
+export default { findById, findByEmail, create, updateToken, setSubscription, updateAvatar }

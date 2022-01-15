@@ -1,8 +1,8 @@
 import { HttpCode } from '../../lib/constants'
-import AuthService from '../../service/auth'
-const authService = new AuthService
+import authService from '../../service/auth'
 
 const registration = async (req, res, next) => {
+  try {
     const { email } = req.body
     const isUserExist = await authService.isUserExist(email)
     if (isUserExist) {
@@ -15,7 +15,10 @@ const registration = async (req, res, next) => {
             })
     }
     const data = await authService.create(req.body)
-    res.status(HttpCode.OK).json({ status: 'success', code: HttpCode.OK, data })
+    res.status(HttpCode.CREATED).json({ status: 'success', code: HttpCode.CREATED, data })
+  } catch (error) {
+    next(error)
+  }
 }
 
 const login = async (req, res, next) => {
