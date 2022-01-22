@@ -22,7 +22,7 @@ const registration = async (req, res, next) => {
     const userData = await authService.create(req.body)
     const emailService = new EmailService(
       process.env.NODE_ENV,
-      new SenderNodemailer(),
+      new SenderSendgrid(),
     )
     
     const isSend = await emailService.sendVerifyEmail(
