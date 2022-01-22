@@ -11,6 +11,7 @@ import {
   SenderNodemailer,
   SenderSendgrid,
 } from '../../service/email'
+import { CustomError } from '../../lib/custom-error'
 
 const aggregation = async (req, res, next) => {
   const { id } = req.params
@@ -20,9 +21,7 @@ const aggregation = async (req, res, next) => {
       .status(HttpCode.OK)
       .json({ status: 'success', code: HttpCode.OK, data })
   }
-  res
-    .status(HttpCode.NOT_FOUND)
-    .json({ status: 'error', code: HttpCode.NOT_FOUND, message: 'Not found' })
+  throw new CustomError(HttpCode.NOT_FOUND, 'Not found')
 }
 
 const uploadAvatar = async (req, res, next) => {
@@ -50,11 +49,7 @@ const verifyUser = async (req, res, next) => {
       data: { message: 'Verification email sent' },
     })
   }
-  res.status(HttpCode.BAD_REQUEST).json({
-    status: 'error',
-    code: HttpCode.BAD_REQUEST,
-    data: { message: 'Verification has already been passed' },
-  })
+  throw new CustomError(HttpCode.BAD_REQUEST, 'Verification has already been passed')
 }
 
 const repeatEmailForVerifyUser = async (req, res, next) => {
@@ -81,21 +76,9 @@ const repeatEmailForVerifyUser = async (req, res, next) => {
           data: { message: 'Success' },
       })
     }
-    return res
-      .status(HttpCode.SE)
-      .json({
-        status: 'error',
-        code: HttpCode.SE,
-        data: { message: 'missing required field email' },
-    })
+      throw new CustomError(HttpCode.SE, 'missing required field email')
   }
-  res
-    .status(HttpCode.NOT_FOUND)
-    .json({
-      status: 'error',
-      code: HttpCode.NOT_FOUND,
-      data: { message: 'User with email not found' },
-  })
+  throw new CustomError(HttpCode.NOT_FOUND, 'User with email not found')
 }
 
 export { aggregation, uploadAvatar, verifyUser, repeatEmailForVerifyUser }

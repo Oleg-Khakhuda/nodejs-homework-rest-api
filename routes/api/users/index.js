@@ -10,12 +10,13 @@ import guard from '../../../middlewares/guard'
 import { upload } from '../../../middlewares/upload'
 import roleAccess from '../../../middlewares/role-access'
 import { Role } from '../../../lib/constants'
+import wrapperError from '../../../middlewares/error-handler'
 
 const router = new Router()
 
-router.get('/stats/:id', guard, roleAccess(Role.ADMIN), aggregation)
-router.patch('/avatar', guard, upload.single('avatar'), uploadAvatar)
-router.get('/verify/:verificationToken', verifyUser)
-router.post('/verify', repeatEmailForVerifyUser)
+router.get('/stats/:id', guard, roleAccess(Role.ADMIN), wrapperError(aggregation))
+router.patch('/avatar', guard, upload.single('avatar'), wrapperError(uploadAvatar))
+router.get('/verify/:verificationToken', wrapperError(verifyUser))
+router.post('/verify', wrapperError(repeatEmailForVerifyUser))
 
 export default router
